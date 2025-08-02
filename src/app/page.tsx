@@ -1,103 +1,112 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Sparkles, Github, Heart } from 'lucide-react';
+import WalletForm from '@/components/WalletForm';
+import RandomQuotes from '@/components/RandomQuotes';
+import { NasibPrediction } from '@/types';
+
+export default function HomePage() {
+  const [prediction, setPrediction] = useState<NasibPrediction | null>(null);
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="min-h-screen bg-gradient-to-br from-[#1e1e2e] via-[#181825] to-[#1e1e2e]">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#cba6f7]/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 -left-40 w-80 h-80 bg-[#89b4fa]/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 right-1/3 w-80 h-80 bg-[#f9e2af]/5 rounded-full blur-3xl" />
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      <div className="relative z-10 container mx-auto px-4 py-8 min-h-screen flex flex-col">
+        {/* Header */}
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center py-8 md:py-12"
+        >
+          <div className="inline-flex items-center gap-2 mb-4">
+            <Sparkles className="w-8 h-8 text-[#cba6f7] animate-pulse" />
+            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-[#cba6f7] via-[#89b4fa] to-[#f9e2af] bg-clip-text text-transparent">
+              Nasib Dompet
+            </h1>
+            <Sparkles className="w-8 h-8 text-[#f9e2af] animate-pulse" />
+          </div>
+          
+          <p className="text-lg md:text-xl text-[#bac2de] max-w-2xl mx-auto leading-relaxed">
+            Tebak nasib sial berdasarkan isi dompet kamu dengan bantuan{' '}
+            <span className="text-[#cba6f7] font-semibold">AI Gemini Flash 2.0</span>
+          </p>
+          
+          <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-[#313244]/50 rounded-full border border-[#45475a]">
+            <div className="w-2 h-2 bg-[#a6e3a1] rounded-full animate-pulse" />
+            <span className="text-sm text-[#a6adc8]">Powered by artificial stupidity</span>
+          </div>
+        </motion.header>
+
+        {/* Main content */}
+        <div className="flex-1 flex flex-col items-center justify-center space-y-12">
+          {!prediction && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <RandomQuotes />
+            </motion.div>
+          )}
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="w-full max-w-lg"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <WalletForm onPrediction={setPrediction} />
+          </motion.div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+        {/* Footer */}
+        <motion.footer
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="text-center py-8 space-y-4"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <div className="flex items-center justify-center gap-2 text-sm text-[#a6adc8]">
+            <span>Created by</span>
+            <span className="text-[#cba6f7] font-bold">Dnz</span>
+            <span>and powered by</span>
+            <Heart className="w-4 h-4 text-[#f38ba8] fill-current animate-pulse" />
+            <span className="text-[#f9e2af]">coffee addiction</span>
+          </div>
+          
+          <div className="text-xs text-[#6c7086] italic">
+            ~ Fellow broke developer who understands the struggle ~
+          </div>
+          
+          <div className="flex items-center justify-center gap-6 text-sm">
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-[#a6adc8] hover:text-[#cba6f7] transition-colors"
+            >
+              <Github className="w-4 h-4" />
+              <span>Source Code</span>
+            </a>
+            <span className="text-[#45475a]">•</span>
+            <span className="text-[#a6adc8]">v1.0.0</span>
+          </div>
+
+          <div className="text-xs text-[#a6adc8] max-w-md mx-auto">
+            Disclaimer: Ini cuma for fun ya, jangan dijadiin panduan hidup beneran. 
+            Kalo nasib beneran sial, itu bukan salah AI 😅
+          </div>
+        </motion.footer>
+      </div>
+    </main>
   );
 }
